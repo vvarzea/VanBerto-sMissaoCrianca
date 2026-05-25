@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+  <meta name="description" content="VanBerto's — O Dia da Criança: jogo educativo sobre os direitos e o Dia da Criança." />
+  <meta name="theme-color" content="#ff6b35" />
+  <title>VanBerto's — O Dia da Criança</title>
+  <link rel="stylesheet" href="dia-crianca.css" />
+</head>
+<body>
+
+  <div id="game"></div>
+
+  <!-- MODAL INICIAL -->
+  <div id="startOverlay" class="overlay">
+    <div class="card">
+      <div class="card-seal" aria-hidden="true">🌟</div>
+      <h1>🎈 O Dia da Criança</h1>
+      <p class="sub"><strong>Professora:</strong> Vanda Várzea</p>
+      <p class="desc">
+        Ajuda o VanBerto's a descobrir os <strong>direitos das crianças</strong><br>
+        e as curiosidades sobre o <strong>Dia da Criança</strong>!<br>
+        Apanha estrelas 🌟, brinquedos 🧸, balões 🎈 e chupa-chupas 🍭. Evita os vilões 🔴 e abre<br>
+        a porta respondendo corretamente às perguntas! Apanha o escudo 🛡️ para ficares protegido!
+      </p>
+      <div class="name-row">
+        <label for="playerName">O teu nome:</label>
+        <input type="text" id="playerName" maxlength="20" placeholder="Escreve o teu nome…" autocomplete="off" />
+      </div>
+      <div class="row">
+        <button id="btnStart" class="btn primary">▶ Começar</button>
+        <button id="btnHow" class="btn">Como jogar ❓</button>
+        <button id="btnMute" class="btn">🔊 Som: ON</button>
+        <button id="btnTouchToggle" class="btn">📱 Botões: AUTO</button>
+        <button id="btnFullscreen" class="btn">⛶ Ecrã todo</button>
+      </div>
+      <p class="tiny">
+        PC: ← → para andar e ↑/Espaço para saltar.<br>
+        Tablet/telemóvel: mantém o dedo no lado esquerdo/direito para andar e faz um toque rápido para saltar.
+      </p>
+    </div>
+  </div>
+
+  <!-- MODAL COMO JOGAR -->
+  <div id="howOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Como jogar">
+    <div class="card">
+      <h2>Como jogar</h2>
+      <ul class="list">
+        <li>🌟 Apanha <strong>estrelas</strong>, 🧸 <strong>brinquedos</strong>, 🎈 <strong>balões</strong> (no ar) e 🍭 <strong>chupa-chupas</strong> (nas plataformas) para ganhar pontos</li>
+        <li>🛡️ O <strong>escudo</strong> dá "modo protegido" (ficar maior e protegido)</li>
+        <li>❤️ O <strong>coração</strong> dá +1 vida (máximo de 5)</li>
+        <li>Evita os vilões 🔴 (se tocares, perdes uma vida)</li>
+        <li>Chega à porta 🎊 e responde à pergunta para avançar</li>
+      </ul>
+      <hr style="border:none;border-top:1px solid #ff6b35;margin:10px 0;opacity:0.3">
+      <p style="margin:6px 0;font-weight:700;font-size:13px;font-family:'Baloo 2',sans-serif;color:#ff6b35">🖥️ PC / Teclado</p>
+      <p style="margin:2px 0;font-size:12px;font-style:italic;color:#ffe0d0">← → para andar &nbsp;|&nbsp; ↑ ou Espaço para saltar &nbsp;|&nbsp; H para alto contraste</p>
+      <p style="margin:8px 0 2px;font-weight:700;font-size:13px;font-family:'Baloo 2',sans-serif;color:#ff6b35">📱 Tablet / Telemóvel</p>
+      <p style="margin:2px 0 8px;font-size:12px;font-style:italic;color:#ffe0d0">Mantém o dedo no lado esquerdo/direito para andar · Toque rápido para saltar</p>
+      <button id="btnCloseHow" class="btn primary">Entendido!</button>
+    </div>
+  </div>
+
+  <!-- MODAL PERGUNTA -->
+  <div id="quizOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quizQuestion">
+    <div class="card">
+      <div class="card-seal" aria-hidden="true">🎈</div>
+      <p id="quizQuestion" class="q" aria-live="polite"></p>
+      <div id="quizAnswers" class="answers" role="group" aria-label="Opções de resposta"></div>
+      <p id="quizFeedback" class="feedback" aria-live="assertive"></p>
+      <p id="quizExplanation" class="explanation hidden"></p>
+      <button id="btnCloseQuiz" class="btn hidden">Continuar</button>
+    </div>
+  </div>
+
+  <!-- CONTROLOS DO PROFESSOR -->
+  <div id="teacherControls" style="position:fixed;top:12px;right:12px;z-index:9500;display:flex;gap:8px;flex-wrap:wrap;">
+    <button id="btnTeacherMenu" class="btn" aria-label="Menu" title="Menu">☰</button>
+    <button id="btnFullscreenGame" class="btn" title="Ecrã todo (tecla F)">⛶ Ecrã todo</button>
+    <button id="btnPause" class="btn">⏸ Pausa</button>
+    <button id="btnRestartLevel" class="btn">🔄 Nível</button>
+    <button id="btnRestartGame" class="btn">🔁 Recomeçar</button>
+  </div>
+
+  <!-- MENU SUSPENSO MOBILE -->
+  <div id="teacherMenuPanel">
+    <button id="mBtnFullscreen" class="btn">⛶ Ecrã todo</button>
+    <button id="mBtnPause"      class="btn">⏸ Pausa</button>
+    <button id="mBtnLevel"      class="btn">🔄 Nível</button>
+    <button id="mBtnRestart"    class="btn">🔁 Recomeçar</button>
+  </div>
+
+  <!-- MODAL HISTÓRIA (entre níveis) -->
+  <div id="historyOverlay" class="overlay hidden">
+    <div class="card history-card">
+      <div class="history-header">
+        <span class="history-icon">🎈</span>
+        <div>
+          <h2>Dia da Criança</h2>
+          <p class="history-subtitle">Sabias que…?</p>
+        </div>
+      </div>
+      <p id="historyText" class="history-text"></p>
+      <div class="row">
+        <button id="btnHistory" class="btn primary">Continuar ▶</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- GAME OVER -->
+  <div id="gameOverOverlay" class="overlay hidden">
+    <div class="card gameover-card">
+      <div class="gameover-icon">💀</div>
+      <h2>Missão Falhada!</h2>
+      <p class="sub">Ficaste sem vidas! As crianças precisam de ti — não desistas!</p>
+      <div class="row">
+        <button id="btnRetry" class="btn primary">🔄 Tentar de novo</button>
+        <button id="btnExit" class="btn">🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VITÓRIA FINAL -->
+  <div id="winOverlay" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="card win-card">
+      <div class="win-icon">🏆</div>
+      <h2>Missão Concluída!</h2>
+      <p class="win-name">Parabéns, <span id="winPlayerName">Herói das Crianças</span>!</p>
+      <div class="win-stats">
+        <div class="win-stat">⭐ <strong id="winScore">0</strong> pontos</div>
+        <div class="win-stat">✅ Respostas certas: <strong id="winPct">—</strong></div>
+        <div class="win-stat win-medal" id="winMedal">🥇 Excelente!</div>
+      </div>
+      <details id="winErrors" style="margin:10px 0;display:none;">
+        <summary style="cursor:pointer;font-weight:700;font-size:12px;color:#ffe0d0;font-style:italic;">📋 Ver erros cometidos</summary>
+        <ul id="winErrorList" style="margin:8px 0 0 16px;font-size:12px;line-height:1.8;color:#ffe0d0;"></ul>
+      </details>
+      <div class="row">
+        <button id="btnWinRestart" class="btn primary">🔄 Jogar de novo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFETIS -->
+  <div id="confetti" class="confetti hidden" aria-hidden="true"></div>
+
+  <!-- BOTÕES TOUCH -->
+  <div id="touchControls">
+    <div class="tc-left">
+      <div class="tc-btn-wrap"><button id="btnLeft"  class="touch-btn" aria-label="Mover esquerda">◀</button><span class="tc-label">Esq</span></div>
+      <div class="tc-btn-wrap"><button id="btnRight" class="touch-btn" aria-label="Mover direita">▶</button><span class="tc-label">Dir</span></div>
+    </div>
+    <div class="tc-right">
+      <div class="tc-btn-wrap"><button id="btnJump" class="touch-btn touch-jump" aria-label="Saltar">↑</button><span class="tc-label">Saltar</span></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+  <script src="dia-crianca.js"></script>
+</body>
+</html>
