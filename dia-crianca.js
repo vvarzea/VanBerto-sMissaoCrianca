@@ -377,7 +377,6 @@ window.addEventListener("DOMContentLoaded", () => {
     ambiente: [
       { q:"Existe um artigo específico sobre o direito ao ambiente na Convenção de 1989?", a:[{t:"Não diretamente, mas os ODS e comentários gerais reconhecem este direito",ok:true},{t:"Sim, é o artigo 29.º",ok:false},{t:"Sim, foi acrescentado em 2010",ok:false}], exp:"A Convenção de 1989 não tem um artigo específico sobre ambiente, mas o Comité dos Direitos da Criança reconhece nos seus comentários gerais que as alterações climáticas e a degradação ambiental ameaçam todos os direitos das crianças. Os ODS 13, 14 e 15 abordam estes temas." },
       { q:"Como afetam as alterações climáticas os direitos das crianças?", a:[{t:"Ameaçam o direito à saúde, à alimentação, à água e a um futuro seguro",ok:true},{t:"Não afetam significativamente as crianças",ok:false},{t:"Só afetam crianças que vivem em zonas costeiras",ok:false}], exp:"As alterações climáticas afetam desproporcionalmente as crianças: aumentam doenças respiratórias, reduzem o acesso a água potável e alimentos, causam deslocamentos forçados e comprometem o seu direito a um futuro seguro. A UNICEF alerta que 1 bilião de crianças vive em zonas de risco extremo." },
-      { q:"Quem é Greta Thunberg e qual o seu papel nos direitos ambientais das crianças?", a:[{t:"Uma jovem ativista sueca que inspirou o movimento global de greve climática escolar",ok:true},{t:"A diretora-geral da UNICEF",ok:false},{t:"Uma cientista portuguesa especialista em clima",ok:false}], exp:"Greta Thunberg, nascida em 2003, começou em 2018 a fazer greve às sextas-feiras em frente ao parlamento sueco para exigir ação climática. Inspirou o movimento Fridays for Future, com milhões de jovens em todo o mundo a exigir que os adultos protejam o seu direito a um futuro habitável." },
       { q:"O que pode cada criança fazer para ajudar o ambiente?", a:[{t:"Reduzir desperdícios, poupar energia, plantar árvores e sensibilizar outros",ok:true},{t:"Nada — só os governos e empresas podem fazer diferença",ok:false},{t:"Deixar de ir à escola para protestar",ok:false}], exp:"Cada criança pode contribuir: separar o lixo, poupar água e energia, escolher produtos sustentáveis, plantar plantas, comer menos carne e sensibilizar família e amigos. As pequenas ações individuais, multiplicadas por milhões, fazem diferença — e a voz das crianças tem cada vez mais impacto político." }
     ],
     digital: [
@@ -737,7 +736,7 @@ window.addEventListener("DOMContentLoaded", () => {
     progressBg.fillStyle(0x000000, 0.20);
     progressBg.fillRoundedRect(8, 110, 230, 10, 5);
 
-    powerIndicator = this.add.text(960-14, 10, "", { fontSize:"14px", fontStyle:"900", color:"#ffd700", stroke:"#200040", strokeThickness:4 }).setScrollFactor(0).setDepth(102).setOrigin(1,0);
+    powerIndicator = this.add.text(960-14, 52, "", { fontSize:"14px", fontStyle:"900", color:"#ffd700", stroke:"#200040", strokeThickness:4 }).setScrollFactor(0).setDepth(102).setOrigin(1,0);
 
     // Assinatura da professora — dentro da faixa castanha do chão, muito subtil
     this.add.text(960-8, 536, "Professora Vanda Várzea", {
@@ -835,6 +834,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (m && o) m.onclick = () => { o.click(); teacherMenuPanel.classList.remove("open"); };
       };
       mirror("mBtnFullscreen", "btnFullscreenGame");
+      mirror("mBtnTouch",      "btnTouchToggle");
       mirror("mBtnPause",      "btnPause");
       mirror("mBtnLevel",      "btnRestartLevel");
       mirror("mBtnRestart",    "btnRestartGame");
@@ -3572,9 +3572,12 @@ window.addEventListener("DOMContentLoaded", () => {
       else { touchState = "auto"; }
       document.body.classList.toggle("force-touch", touchState === "on");
       document.body.classList.toggle("hide-touch",  touchState === "off");
-      btn.textContent =
+      const lbl =
         touchState === "on"  ? "📱 Botões: ON"  :
         touchState === "off" ? "📱 Botões: OFF" : "📱 Botões: AUTO";
+      btn.textContent = lbl;
+      const mBtn = document.getElementById("mBtnTouch");
+      if (mBtn) mBtn.textContent = lbl;
     };
   })();
   btnHow.onclick=()=>howOverlay.classList.remove("hidden");
